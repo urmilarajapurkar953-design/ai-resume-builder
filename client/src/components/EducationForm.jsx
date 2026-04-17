@@ -1,6 +1,8 @@
 import { GraduationCap, Plus, Trash2 } from 'lucide-react';
 import React from 'react'
 
+// test change for CodeRabbit
+
 const EducationForm = ({data, onChange}) => {
     const addEducation = () => {
     const newEducation = {
