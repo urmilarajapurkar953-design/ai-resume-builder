@@ -142,19 +142,28 @@ const downloadResume = () => {
 
 const saveResume = async () => {
   try {
+
+    if (!resumeId) {
+      console.log("❌ NO RESUME ID");
+      return;
+    }
+
     let updatedResumeData = JSON.parse(JSON.stringify(resumeData));
 
     const formData = new FormData();
 
-    const imageFile = resumeData.personal_info.image;
+    const imageFile = resumeData.personal_info?.image;
 
     if (imageFile instanceof File) {
-  formData.append('image', imageFile);
-}
+      formData.append('image', imageFile);
+    }
 
     formData.append('resumeId', resumeId);
     formData.append('resumeData', JSON.stringify(updatedResumeData));
     formData.append('removeBackground', String(removeBackground));
+
+    console.log("🔥 SENDING REMOVE BG:", removeBackground);
+    console.log("🔥 RESUME ID:", resumeId);
 
     const { data } = await api.put(
       '/api/resumes/update',
@@ -170,6 +179,7 @@ const saveResume = async () => {
     toast.success(data.message);
 
   } catch (error) {
+    console.log("❌ SAVE ERROR:", error);
     toast.error(error?.response?.data?.message || error.message);
   }
 };
