@@ -1,6 +1,7 @@
 import imagekit from "../config/imageKit.js";
 import Resume from "../models/Resume.js";
 import fs from "fs";
+import axios from "axios";
 
 // CREATE RESUME
 export const createResume = async (req, res) => {
@@ -87,6 +88,32 @@ export const getPublicResumeById = async (req, res) => {
     });
   }
 };
+const removeBgFromImage = async (filePath) => {
+  try {
+    const response = await axios.post(
+      "https://api.remove.bg/v1.0/removebg",
+      {
+        image_file_b64: fs.readFileSync(filePath, { encoding: "base64" }),
+        size: "auto",
+      },
+      {
+        headers: {
+          "X-Api-Key": process.env.REMOVE_BG_API_KEY,
+        },
+        responseType: "arraybuffer",
+      }
+    );
+
+    const outputPath = filePath + "-no-bg.png";
+    fs.writeFileSync(outputPath, response.data);
+
+    return outputPath;
+
+  } catch (error) {
+    console.log("Remove.bg Error:", error.message);
+    return filePath; // fallback original
+  }
+};
 
 // UPDATE RESUME
 export const updateResume = async (req, res) => {
@@ -106,37 +133,26 @@ export const updateResume = async (req, res) => {
     // ✅ existing image
     let imageUrl = resumeDataCopy.personal_info?.image || "";
 
-    // ✅ upload new image
-    if (image) {
-      try {
-        const response = await imagekit.upload({
-          file: fs.readFileSync(image.path),
-          fileName: "resume.png",
-          folder: "user-resumes",
-        });
+if (image || (removeBackground == true || removeBackground === "true")) {  let filePath = image.path;
 
-        imageUrl = response.url;
-      } catch (err) {
-        console.log("Upload Error:", err.message);
-      }
-    }
+  // ✅ APPLY BACKGROUND REMOVE
+  console.log("REMOVE BG VALUE:", removeBackground);
+if (removeBackground == true || removeBackground === "true") {    filePath = await removeBgFromImage(filePath);
+  }
 
-    // ✅ background remove
-    // 🔴 TEMP DISABLED (causing issue)
-// if (removeBackground === "true" && imageUrl) {
-//   try {
-//     const url = new URL(imageUrl);
-//     const path = url.pathname;
+  try {
+    const response = await imagekit.upload({
+      file: fs.readFileSync(filePath),
+      fileName: "resume.png",
+      folder: "user-resumes",
+    });
 
-//     imageUrl = imagekit.url({
-//       path: path,
-//       transformation: [{ effect: "bgremove" }],
-//     });
+    imageUrl = response.url;
 
-//   } catch (err) {
-//     console.log("BG Remove Error:", err.message);
-//   }
-// }
+  } catch (err) {
+    console.log("Upload Error:", err.message);
+  }
+}
 
     // ✅ safe assign
     if (!resumeDataCopy.personal_info) {

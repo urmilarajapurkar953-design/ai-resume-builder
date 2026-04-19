@@ -22,19 +22,28 @@ const ResumeBuilder = () => {
   const {resumeId} = useParams();
   const {token} = useSelector(state => state.auth);
 
-  const [resumeData, setResumeData] = useState({
-    _id: '',
-    title: '',
-    personal_info: {},
-    professional_summary: '',
-    experience: [],
-    education: [],
-    project: [],
-    skills: [],
-    template: 'classic',
-    accent_color: "#3B82F6",
-    public: false,
-  });
+const [resumeData, setResumeData] = useState({
+  _id: '',
+  title: '',
+  personal_info: {
+    full_name: "",
+    email: "",
+    phone: "",
+    location: "",
+    profession: "",
+    linkedin: "",
+    website: "",
+    image: null,
+  },
+  professional_summary: '',
+  experience: [],
+  education: [],
+  project: [],
+  skills: [],
+  template: 'classic',
+  accent_color: "#3B82F6",
+  public: false,
+});
 
   const loadExistingResume = async (resumeId) => {
     try {
@@ -52,7 +61,11 @@ const ResumeBuilder = () => {
 
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [removeBackground, setRemoveBackground] = useState(false);
-
+useEffect(() => {
+  if (resumeId) {
+    saveResume(); // 🔥 auto call backend when toggle changes
+  }
+}, [removeBackground]);
 
 const sections = [
   {id: 'personal', name: 'Personal Info', icon: User},
@@ -70,22 +83,24 @@ useEffect(() => {
 }, [resumeId])
 
 const changeResumeVisibility = async () => {
-try {
-  const formData = new FormData();
-  formData.append('resumeId',resumeId);
-  formData.append('resumeData', JSON.stringify({public: !resumeData.public}));
+  try {
+    const formData = new FormData();
+    formData.append('resumeId', resumeId);
+    formData.append('resumeData', JSON.stringify({ public: !resumeData.public }));
 
+    const { data } = await api.put(
+      '/api/resumes/update',
+      formData,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-const {data} = await api.get(
-  '/api/resumes/get/' + resumeId,
-  { headers: { Authorization: `Bearer ${token}` } }
-);  setResumeData({...resumeData, public: !resumeData.public});
-  toast.success(data.message);
+    setResumeData(data.resume);
+    toast.success(data.message);
 
-  
-} catch (error) {
-  toast.error(error?.response?.data?.message || error.message);
-}}
+  } catch (error) {
+    toast.error(error?.response?.data?.message || error.message);
+  }
+};
 
 const handleShare = () => {
   const resumeUrl = window.location.origin + '/view/' + resumeId;
@@ -134,10 +149,8 @@ const saveResume = async () => {
     const imageFile = resumeData.personal_info.image;
 
     if (imageFile instanceof File) {
-      formData.append('image', imageFile);
-    } else {
-      delete updatedResumeData.personal_info.image;
-    }
+  formData.append('image', imageFile);
+}
 
     formData.append('resumeId', resumeId);
     formData.append('resumeData', JSON.stringify(updatedResumeData));
@@ -160,6 +173,7 @@ const saveResume = async () => {
     toast.error(error?.response?.data?.message || error.message);
   }
 };
+console.log("FULL DATA:", resumeData);
   return (
     <div>
       <div className='max-w-7xl mx-auto px-4 py-6'>

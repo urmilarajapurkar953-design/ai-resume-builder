@@ -85,7 +85,6 @@ const PersonalInfoForm = ({
           />
         </label>
         {typeof data.image === "object" && (
-          {/* 🔴 TEMP DISABLED - Remove Background Feature
 <div className="flex flex-col gap-1 pl-4 text-sm">
   <p className="">Remove Background</p>
   <label className="relative inline-flex items-center cursor-pointer">
@@ -103,7 +102,7 @@ const PersonalInfoForm = ({
     <div className="absolute left-1 top-1 w-3 h-3 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>
   </label>
 </div>
-*/}
+
         )}
       </div>
       {fields.map((field)=>{
