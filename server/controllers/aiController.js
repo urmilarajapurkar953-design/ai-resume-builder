@@ -97,7 +97,7 @@ export const uploadResume = async (req, res) => {
         is_current: { type: Boolean },
         
     }],
-    projects: [{
+    project: [{
         name: { type: String},
         type: { type: String},
         description: { type: String},
@@ -127,13 +127,27 @@ export const uploadResume = async (req, res) => {
         })
 
         const extractedData = response.choices[0].message.content;
-        const parsedData = JSON.parse(extractedData);
+
+let parsedData;
+
+try {
+  parsedData = JSON.parse(extractedData);
+} catch (err) {
+  console.log("❌ JSON PARSE ERROR:", extractedData);
+  return res.status(400).json({
+    message: "AI returned invalid JSON"
+  });
+}
         const newResume = await Resume.create({
             userId,
             title, ...parsedData
         })
 response.json({resumeId: newResume._id})
-    } catch (error) {
-        return res.status(400).json({message: 'Error occurred while uploading resume'});  
-    }
+    } 
+   catch (error) {
+  console.log("❌ AI ERROR:", error);
+  return res.status(400).json({
+    message: error.message || "Error occurred while uploading resume"
+  });
+}
 }

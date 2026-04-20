@@ -62,24 +62,46 @@ const { user, token } = useSelector(state => state.auth)
    }
   }
 
-  const uploadResume = async (event) => {
-    event.preventDefault();
-    setIsLoading(true)
-    try {
-const resumeText = await extractTextFromPDF(resume)
-          const {data} = await api.post('/api/ai/upload-resume', {title, resumeText}, {headers: {Authorization: token}})
-          setTitle('')
-          setResume(null)
-          setShowUploadResume(false);
-          navigate(`/app/builder/${data.resumeId}`)
+const uploadResume = async (event) => {
+  event.preventDefault();
+  setIsLoading(true);
 
-      
-    } catch (error) {
-      toast.error(error?.response?.data?.message || error.message)
+  try {
+    console.log("STEP 1: Start");
+
+    const resumeText = await extractTextFromPDF(resume);
+
+    console.log("STEP 2: Extracted");
+    console.log("TEXT LENGTH:", resumeText?.length);
+    console.log("TEXT:", resumeText);
+
+    if (!resumeText || resumeText.length < 20) {
+      toast.error("PDF not readable. Try another file.");
+      return;
     }
-    setIsLoading(false)
-   
+
+    const { data } = await api.post(
+      '/api/ai/upload-resume',
+      { title, resumeText },
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    );
+
+    console.log("STEP 3: API SUCCESS");
+
+    setTitle('');
+    setResume(null);
+    setShowUploadResume(false);
+    navigate(`/app/builder/${data.resumeId}`);
+
+  } catch (error) {
+    console.log("❌ FULL ERROR:", error.response?.data || error.message);
+    toast.error(error?.response?.data?.message || error.message);
+  } finally {
+    setIsLoading(false);
   }
+};
 
 const editTitle = async (event) => {
   event.preventDefault();

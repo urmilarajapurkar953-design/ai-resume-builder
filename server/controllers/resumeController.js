@@ -133,11 +133,14 @@ export const updateResume = async (req, res) => {
     // ✅ existing image
     let imageUrl = resumeDataCopy.personal_info?.image || "";
 
-if (image || (removeBackground == true || removeBackground === "true")) {  let filePath = image.path;
+if (image) {
+  let filePath = image.path;
 
-  // ✅ APPLY BACKGROUND REMOVE
   console.log("REMOVE BG VALUE:", removeBackground);
-if (removeBackground == true || removeBackground === "true") {    filePath = await removeBgFromImage(filePath);
+
+  // ✅ only remove bg IF image exists
+  if (removeBackground === "true") {
+    filePath = await removeBgFromImage(filePath);
   }
 
   try {

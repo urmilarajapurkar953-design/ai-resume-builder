@@ -62,8 +62,8 @@ const [resumeData, setResumeData] = useState({
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [removeBackground, setRemoveBackground] = useState(false);
 useEffect(() => {
-  if (resumeId) {
-    saveResume(); // 🔥 auto call backend when toggle changes
+  if (resumeId && resumeData._id) {
+    saveResume();
   }
 }, [removeBackground]);
 
@@ -84,9 +84,17 @@ useEffect(() => {
 
 const changeResumeVisibility = async () => {
   try {
+    let updatedResumeData = JSON.parse(JSON.stringify(resumeData));
+
+    // toggle public
+    updatedResumeData.public = !resumeData.public;
+
+    // ❌ remove _id (same fix as before)
+    delete updatedResumeData._id;
+
     const formData = new FormData();
     formData.append('resumeId', resumeId);
-    formData.append('resumeData', JSON.stringify({ public: !resumeData.public }));
+    formData.append('resumeData', JSON.stringify(updatedResumeData));
 
     const { data } = await api.put(
       '/api/resumes/update',
@@ -148,8 +156,10 @@ const saveResume = async () => {
       return;
     }
 
-    let updatedResumeData = JSON.parse(JSON.stringify(resumeData));
+let updatedResumeData = JSON.parse(JSON.stringify(resumeData));
 
+// ❌ REMOVE _id (VERY IMPORTANT)
+delete updatedResumeData._id;
     const formData = new FormData();
 
     const imageFile = resumeData.personal_info?.image;
