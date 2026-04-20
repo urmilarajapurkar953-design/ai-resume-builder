@@ -2,7 +2,7 @@ import Resume from "../models/Resume.js";
 import ai from "../config/ai.js";
 
 //Controller for enhancing resume professional summary using AI
-//POST: /api/ai/enhance-pro-summary
+//POST: /api/ai/enhance-pro-summary 
 
 
 export const enhanceProfessionalSummary = async (req, res) => {
