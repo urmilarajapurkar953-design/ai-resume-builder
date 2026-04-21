@@ -73,43 +73,52 @@ export const uploadResume = async (req, res) => {
         }
 
         const systemPrompt = "you are an expert AI Agent to extract data from resume."
-        const userPrompt = `extract data from this resume : ${resumeText} 
-        provide the data in the following json format with no additional text before or after:
-        {
-        professional_summary: { type: String, default: '' },
-    skills: [{ type: String }],
-    personal_info: {
-        image: { type: String, default: '' },
-        full_name: { type: String, default: '' },
-        profession: { type: String, default: '' },
-        email: { type: String, default: '' },
-        phone: { type: String, default: '' },
-        location: { type: String, default: '' },
-        linkedin: { type: String, default: '' },
-        website: { type: String, default: '' },
-    },
-    experience: [{
-        company: { type: String},
-        position: { type: String},
-        start_date: { type: String},
-        end_date: { type: String},
-        description: { type: String},
-        is_current: { type: Boolean },
-        
-    }],
-    project: [{
-        name: { type: String},
-        type: { type: String},
-        description: { type: String},
-    }],
-    education: [{
-        institution: { type: String},
-        degree: { type: String},
-        field_of_study: { type: String},
-        graduation_year: { type: String},
-        gpa: { type: String},
+        const userPrompt = `
+Extract data from this resume: ${resumeText}
 
-    }],}`;
+Return ONLY valid JSON (no explanation).
+
+{
+  "professional_summary": "",
+  "skills": [],
+  "personal_info": {
+    "image": "",
+    "full_name": "",
+    "profession": "",
+    "email": "",
+    "phone": "",
+    "location": "",
+    "linkedin": "",
+    "website": ""
+  },
+  "experience": [
+    {
+      "company": "",
+      "position": "",
+      "start_date": "",
+      "end_date": "",
+      "description": "",
+      "is_current": false
+    }
+  ],
+  "project": [
+    {
+      "name": "",
+      "type": "",
+      "description": ""
+    }
+  ],
+  "education": [
+    {
+      "institution": "",
+      "degree": "",
+      "field_of_study": "",
+      "graduation_year": "",
+      "gpa": ""
+    }
+  ]
+}
+`;
 
         const response = await ai.chat.completions.create({
             model: process.env.OPENAI_MODEL_NAME,
@@ -128,6 +137,8 @@ export const uploadResume = async (req, res) => {
 
         const extractedData = response.choices[0].message.content;
 
+        console.log("RAW AI RESPONSE:", extractedData);
+
 let parsedData;
 
 try {
@@ -142,8 +153,7 @@ try {
             userId,
             title, ...parsedData
         })
-response.json({resumeId: newResume._id})
-    } 
+res.json({ resumeId: newResume._id });    } 
    catch (error) {
   console.log("❌ AI ERROR:", error);
   return res.status(400).json({
