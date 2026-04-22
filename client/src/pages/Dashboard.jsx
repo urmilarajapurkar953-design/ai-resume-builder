@@ -291,7 +291,7 @@ const editTitle = async (event) => {
                     setShowUploadResume(false);setTitle("");
                   }}
                 />
-                Upload Resume
+                
               </button>
             </div>
           </form>
