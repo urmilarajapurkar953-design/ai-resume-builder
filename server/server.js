@@ -13,8 +13,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors());
-
+app.use(cors({
+  origin: [
+    "http://localhost:5173",              // local dev
+    "https://ai-resume-builder-fronted-yvgr.onrender.com/"
+  ],
+  credentials: true
+}));
 app.get('/', (req, res) => {
   res.send('server is running');
 });
