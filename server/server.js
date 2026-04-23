@@ -16,12 +16,8 @@ app.use(express.json());
 import cors from "cors";
 
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://ai-resume-builder-fronted-yvgr.onrender.com"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 app.get('/', (req, res) => {
