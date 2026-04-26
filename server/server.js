@@ -9,7 +9,7 @@ import aiRouter from './routes/aiRoutes.js';
 dotenv.config({ path: "./.env" });
 console.log("ENV CHECK:", process.env.IMAGEKIT_PRIVATE_KEY);
 
-const app = express();
+const app = express();0
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());

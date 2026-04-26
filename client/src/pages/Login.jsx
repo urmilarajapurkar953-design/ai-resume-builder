@@ -84,47 +84,47 @@ const Login = () => {
 
         {/* NAME */}
         {state !== "login" && (
-          <div className="flex items-center mt-6 w-full bg-gray-800 border border-gray-700 h-12 rounded-full pl-6 gap-2">
-            <User2Icon color="#6B7280" size={16} />
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              className="w-full bg-transparent text-white placeholder-gray-400 outline-none"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        )}
+  <div className="flex items-center mt-6 w-full bg-[#1F2937] border border-gray-700 h-12 rounded-full pl-6 pr-6 gap-3">
+    <User2Icon color="#6B7280" size={16} className="flex-shrink-0" />
+    <input
+      type="text"
+      name="name"
+      placeholder="Name"
+      className="w-full bg-transparent text-white placeholder-gray-400 outline-none border-none focus:ring-0"
+      value={formData.name}
+      onChange={handleChange}
+      required
+    />
+  </div>
+)}
 
         {/* EMAIL */}
-        <div className="flex items-center w-full mt-4 bg-gray-800 border border-gray-700 h-12 rounded-full pl-6 gap-2">
-          <Mail color="#6B7280" size={14} />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email id"
-            className="w-full bg-transparent text-white placeholder-gray-400 outline-none"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <div className="flex items-center w-full mt-4 bg-gray-800 border border-gray-700 h-12 rounded-full pl-6 pr-4 gap-3">
+  <Mail color="#6B7280" size={14} className="flex-shrink-0" />
+  <input
+    type="email"
+    name="email"
+    placeholder="Email id"
+    className="w-full bg-transparent text-white placeholder-gray-400 outline-none border-none focus:ring-0"
+    value={formData.email}
+    onChange={handleChange}
+    required
+  />
+</div>
 
         {/* PASSWORD */}
-        <div className="flex items-center mt-4 w-full bg-gray-800 border border-gray-700 h-12 rounded-full pl-6 gap-2">
-          <Lock color="#6B7280" size={14} />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="w-full bg-transparent text-white placeholder-gray-400 outline-none"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <div className="flex items-center w-full mt-4 bg-gray-800 border border-gray-700 h-12 rounded-full pl-6 pr-4 gap-3">
+  <Lock color="#6B7280" size={14} className="flex-shrink-0" />
+  <input
+    type="password"
+    name="password"
+    placeholder="Password"
+    className="w-full bg-transparent text-white placeholder-gray-400 outline-none border-none focus:ring-0"
+    value={formData.password}
+    onChange={handleChange}
+    required
+  />
+</div>
 
         {/* FORGOT PASSWORD */}
         <div className="mt-4 text-left">
