@@ -1,6 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const CallToAction = () => {
+
+  const navigate = useNavigate();
+
   return (
     <>
       <style>{`
@@ -72,32 +77,34 @@ const CallToAction = () => {
           </p>
 
           <div className="mt-8">
-            <a
-              href="https://prebuiltui.com"
-              className="group relative inline-flex items-center gap-2 rounded-xl py-3 px-8 bg-green-600 hover:bg-green-700 transition-all duration-300 text-white font-bold text-sm md:text-base shadow-xl shadow-green-200 active:scale-95 overflow-hidden"
-            >
-              <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
-                <div className="relative h-full w-8 bg-white/20"></div>
-              </div>
-              
-              <span className="relative">Get Started Now</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="relative transition-transform group-hover:translate-x-1"
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </a>
-          </div>
+  <button
+   onClick={() => navigate("/login?state=register")}
+    className="group relative inline-flex items-center gap-2 rounded-xl py-3 px-8 bg-green-600 hover:bg-green-700 transition-all duration-300 text-white font-bold text-sm md:text-base shadow-xl shadow-green-200 active:scale-95 overflow-hidden"
+  >
+    <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
+      <div className="relative h-full w-8 bg-white/20"></div>
+    </div>
+
+    <span className="relative">Get Started Now</span>
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="relative transition-transform group-hover:translate-x-1"
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  </button>
+</div>
+        
           
           <div className="mt-8 text-slate-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">
              Trusted by 50,000+ professionals
